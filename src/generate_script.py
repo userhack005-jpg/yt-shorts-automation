@@ -11,7 +11,12 @@ from pathlib import Path
 
 from config import END_CTA, TARGET_DURATION_SECONDS
 
-USED_TOPICS_PATH = Path(__file__).resolve().parent.parent / "reports" / "used_topics.json"
+CHANNEL_MODE = os.environ.get("CHANNEL_MODE", "facts").strip().lower()
+USED_TOPICS_PATH = (
+    Path(__file__).resolve().parent.parent
+    / "reports"
+    / ("used_topics_trading.json" if CHANNEL_MODE == "trading" else "used_topics.json")
+)
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 GROQ_MODELS = (

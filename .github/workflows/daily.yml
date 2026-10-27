@@ -1,4 +1,4 @@
-name: Daily YouTube Short
+name: Daily YouTube Short (Multi-Channel)
 
 on:
   workflow_dispatch:
@@ -8,15 +8,19 @@ on:
         type: choice
         options: [auto, morning, afternoon, night]
         default: auto
+      channel:
+        description: "Which channel to post on"
+        type: choice
+        options: [both, facts, trading]
+        default: both
   schedule:
-    # IST (भारतीय समय) के हिसाब से: सुबह 11:30, शाम 5:30, रात 9:30 बजे
+    # IST के हिसाब से: सुबह 11:30, शाम 5:30, रात 9:30 बजे
     - cron: "0 6 * * *"
     - cron: "0 12 * * *"
     - cron: "0 16 * * *"
 
-# लूप या डबल रन रोकने के लिए लॉक
 concurrency:
-  group: yt-shorts-production
+  group: yt-shorts-multi-production
   cancel-in-progress: false
 
 permissions:
@@ -25,8 +29,7 @@ permissions:
 jobs:
   post-short:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
-    # अगर आप GitHub Variable में PAUSE_AUTOMATION = true कर देंगे तो यह खुद रुक जाएगा
+    timeout-minutes: 35
     if: ${{ vars.PAUSE_AUTOMATION != 'true' }}
     steps:
       - name: Checkout repo
@@ -38,6 +41,7 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
           EVENT_SCHEDULE: ${{ github.event.schedule }}
           INPUT_SLOT: ${{ github.event.inputs.slot }}
+          INPUT_CHANNEL: ${{ github.event.inputs.channel }}
         run: |
           if [ "$EVENT_NAME" = "schedule" ]; then
             case "$EVENT_SCHEDULE" in
@@ -46,10 +50,13 @@ jobs:
               "0 16 * * *") slot=night ;;
               *) slot=auto ;;
             esac
+            ch="both"
           else
             slot="${INPUT_SLOT:-auto}"
+            ch="${INPUT_CHANNEL:-both}"
           fi
           echo "slot=$slot" >> "$GITHUB_OUTPUT"
+          echo "channel=$ch" >> "$GITHUB_OUTPUT"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -57,25 +64,20 @@ jobs:
           python-version: "3.11"
           cache: "pip"
 
-      - name: Install FFmpeg & Fonts
+      - name: Install FFmpeg & Hindi Fonts
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          sudo apt-get install -y ffmpeg fonts-dejavu-core fonts-noto-core
           ffmpeg -version
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      - name: Pre-Flight Auth & API Check
+      # ================= CHANNEL 1: FACTS (Original Session) =================
+      - name: Run Channel 1 (Facts)
+        if: ${{ steps.slot.outputs.channel == 'both' || steps.slot.outputs.channel == 'facts' }}
         env:
-          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
-          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
-          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
-        run: |
-          python -c "from src.youtube_auth import require_expected_channel; require_expected_channel(); print('Pre-Flight Check Passed!')"
-
-      - name: Run Daily Pipeline
-        env:
+          CHANNEL_MODE: "facts"
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
@@ -85,15 +87,30 @@ jobs:
           POST_SLOT: ${{ steps.slot.outputs.slot }}
         run: python main.py
 
-      - name: Save Used Topics safely
-        if: success()
+      # ================= CHANNEL 2: TRADING (Second Session) =================
+      - name: Run Channel 2 (Trading)
+        if: ${{ (steps.slot.outputs.channel == 'both' || steps.slot.outputs.channel == 'trading') && secrets.YT_REFRESH_TOKEN_TRADING != '' }}
+        env:
+          CHANNEL_MODE: "trading"
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN_TRADING }}
+          YT_CHANNEL_ID_TRADING: ${{ secrets.YT_CHANNEL_ID_TRADING }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          POST_SLOT: ${{ steps.slot.outputs.slot }}
+        run: python main.py
+
+      - name: Save Used Topics for Both Channels
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports/used_topics.json
+          git add reports/used_topics*.json
           if ! git diff --cached --quiet; then
-            git commit -m "Auto-update used_topics.json [skip ci]"
-            git pull --rebase origin main || git pull --rebase origin master
+            git commit -m "Update used topics [skip ci]"
+            git pull --rebase origin master
             git push
           fi
 
