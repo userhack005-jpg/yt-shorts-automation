@@ -1,0 +1,105 @@
+name: Daily YouTube Short
+
+on:
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: "Which slot to run"
+        type: choice
+        options: [auto, morning, afternoon, night]
+        default: auto
+  schedule:
+    # IST (भारतीय समय) के हिसाब से: सुबह 11:30, शाम 5:30, रात 9:30 बजे
+    - cron: "0 6 * * *"
+    - cron: "0 12 * * *"
+    - cron: "0 16 * * *"
+
+# लूप या डबल रन रोकने के लिए लॉक
+concurrency:
+  group: yt-shorts-production
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  post-short:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    # अगर आप GitHub Variable में PAUSE_AUTOMATION = true कर देंगे तो यह खुद रुक जाएगा
+    if: ${{ vars.PAUSE_AUTOMATION != 'true' }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Resolve post slot
+        id: slot
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+          INPUT_SLOT: ${{ github.event.inputs.slot }}
+        run: |
+          if [ "$EVENT_NAME" = "schedule" ]; then
+            case "$EVENT_SCHEDULE" in
+              "0 6 * * *") slot=morning ;;
+              "0 12 * * *") slot=afternoon ;;
+              "0 16 * * *") slot=night ;;
+              *) slot=auto ;;
+            esac
+          else
+            slot="${INPUT_SLOT:-auto}"
+          fi
+          echo "slot=$slot" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install FFmpeg & Fonts
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          ffmpeg -version
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Pre-Flight Auth & API Check
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+        run: |
+          python -c "from src.youtube_auth import require_expected_channel; require_expected_channel(); print('Pre-Flight Check Passed!')"
+
+      - name: Run Daily Pipeline
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          POST_SLOT: ${{ steps.slot.outputs.slot }}
+        run: python main.py
+
+      - name: Save Used Topics safely
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/used_topics.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto-update used_topics.json [skip ci]"
+            git pull --rebase origin main || git pull --rebase origin master
+            git push
+          fi
+
+      - name: Alert Phone on Failure
+        if: failure() || cancelled()
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          POST_SLOT: ${{ steps.slot.outputs.slot }}
+        run: python -c "from src.notify import notify_failed; notify_failed()"

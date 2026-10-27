@@ -1,0 +1,11 @@
+.env
+client_secret.json
+src/client_secret.json.json
+token.json
+workdir/
+.venv/
+__pycache__/
+*.pyc
+*.mp4
+*.mp3
+*.log

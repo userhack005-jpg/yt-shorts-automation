@@ -1,0 +1,51 @@
+name: Weekly channel report
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Mondays at 15:00 UTC, after the daily Short has posted.
+    - cron: "0 15 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build channel report
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+        run: python main.py report
+
+      - name: Publish report summary
+        run: |
+          echo "## Channel progress" >> "$GITHUB_STEP_SUMMARY"
+          cat reports/latest.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit report history
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports
+          if git diff --cached --quiet; then
+            echo "No report changes to commit"
+          else
+            git commit -m "Weekly YouTube channel report"
+            git pull --rebase origin master
+            git push
+          fi
