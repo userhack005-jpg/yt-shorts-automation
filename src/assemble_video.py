@@ -18,7 +18,7 @@ def _run(cmd: list[str]) -> None:
         raise RuntimeError(f"FFmpeg command failed:\n{' '.join(cmd)}\nError:\n{proc.stderr[-800:]}")
 
 
-def _ probe_duration(media_path: str) -> float:
+def _probe_duration(media_path: str) -> float:
     cmd = [
         "ffprobe", "-v", "error",
         "-show_entries", "format=duration",
