@@ -19,9 +19,10 @@ USED_TOPICS_PATH = (
 )
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
+# पुराने मॉडल्स की जगह ये लेटेस्ट और 100% वर्किंग Groq मॉडल नाम रखें:
 GROQ_MODELS = (
-    "llama-3.3-70b-versatile",
     "openai/gpt-oss-120b",
+    "openai/gpt-oss-20b",
     "qwen/qwen3.6-27b",
 )
 
