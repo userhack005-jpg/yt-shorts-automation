@@ -87,25 +87,7 @@ jobs:
           POST_SLOT: ${{ steps.slot.outputs.slot }}
         run: python main.py
 
-      # ================= CHANNEL 2: TRADING (Second Session) =================
-      - name: Run Channel 2 (Trading)
-        if: ${{ steps.slot.outputs.channel == 'both' || steps.slot.outputs.channel == 'trading' }}
-        env:
-          CHANNEL_MODE: "trading"
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
-          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
-          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
-          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN_TRADING }}
-          YT_CHANNEL_ID_TRADING: ${{ secrets.YT_CHANNEL_ID_TRADING }}
-          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
-          POST_SLOT: ${{ steps.slot.outputs.slot }}
-        run: |
-          if [ -z "$YT_REFRESH_TOKEN" ]; then
-            echo "YT_REFRESH_TOKEN_TRADING secret is not set yet. Skipping Channel 2."
-            exit 0
-          fi
-          python main.py
+     
 
       - name: Save Used Topics for Both Channels
         if: always()
