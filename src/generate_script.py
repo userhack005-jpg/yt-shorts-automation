@@ -177,23 +177,41 @@ def generate_script(topic: dict, length_hint: str = "") -> dict:
     recent_avoid = "; ".join(used[-80:]) if used else "none yet"
 
     system_prompt = (
-        "You write viral, high-retention YouTube Shorts scripts in conversational Hindi (Hinglish tone). "
-        "CRITICAL LANGUAGE RULES: "
-        "1) Write 'script' in Devanagari Hindi script so the Indian TTS voice pronounces it naturally, "
-        "using everyday spoken Hinglish words (e.g., साइंटिस्ट्स, ब्रेन, मार्केट, गोल्ड, सिग्नल). "
-        "2) Write 'title' in catchy English/Hinglish (under 65 chars, no hashtags). "
-        "3) 'keywords' MUST be in English (4 concrete 2-word search terms for stock videos). "
-        "4) 'topic_key' MUST be in English lowercase (3-4 words) for duplicate tracking. "
-        "Structure strictly: "
-        "- HOOK (first 8-12 words): A shocking statement or impossible fact. "
-        "- PAYOFF: Explain the real mechanism in fast-paced, simple language. "
-        "- TWIST: One mind-blowing final detail. "
-        "Write strictly 90-110 words in the script before CTA. "
-        "Output ONLY valid JSON: "
-        '{"title": "<Catchy Title>", '
-        '"script": "<Devanagari conversational script>", '
-        '"keywords": ["<keyword 1>", "<keyword 2>", "<keyword 3>", "<keyword 4>"], '
-        '"topic_key": "<english lowercase topic key>"}'
+       "You write YouTube Shorts for SilentVision, a curiosity channel. "
+        "The videos that get traction are specific rare-animal secrets, "
+        "weird human-body facts, and concrete space wow facts. "
+        "Do not write motivation, finance, self-help, or generic trivia. "
+        "Structure the narration in this order: "
+        "1) HOOK: first sentence, 8-12 words, a stop-the-scroll claim. "
+        "Open with a contradiction, a hidden mechanism, or a fact that "
+        "sounds impossible. Never start with Did you know, Imagine, "
+        "What if, Hey, or Welcome. "
+        "2) PAYOFF: one widely reported scientific fact with a concrete "
+        "image people can picture. "
+        "3) TWIST: the weirder detail that makes the fact land. "
+        "4) CLOSE: one short line that rewards watching to the end. "
+        "Do not ask people to follow, subscribe, like, or comment. "
+        "A follow line is added after you write. "
+        f"Spoken length must land near {TARGET_DURATION_SECONDS} seconds: "
+        "write 115-135 words, punchy, out loud, no filler. "
+        "Only use a widely reported scientific fact. Do not invent numbers, "
+        "percentages, or fake mechanisms. If you are not sure, pick a simpler fact. "
+        "No stage directions, no emojis in the script. "
+        "Title style examples that worked: "
+        "'The SHOCKING Truth About Crocodiles Survival Secrets', "
+        "'Why You Never See Baby Birds', "
+        "'The Teaspoon That Weighs 4 Billion Tons', "
+        "'The SHOCKING Reason for the Moon's Dark Side', "
+        "'The Mantis Shrimp: Ocean's Hidden Rainbow Eye'. "
+        "Title must be under 70 characters, no hashtags in the title. "
+        "keywords must be concrete stock-footage search terms for that subject "
+        "(animal name, habitat, planet, body part), not abstract words. "
+        "Output ONLY valid JSON, no markdown fences. "
+        "JSON schema: "
+        '{"title": "<catchy title>", '
+        '"script": "<narration text>", '
+        '"keywords": ["<3-5 visual search keywords>"], '
+        '"topic_key": "<short lowercase phrase naming the exact fact>"}'
     )
 
     best_candidate = None
