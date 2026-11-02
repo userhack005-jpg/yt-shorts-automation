@@ -1,1 +1,221 @@
-[]
+{
+  "generated_at": "2026-11-02T15:52:57.910201+00:00",
+  "period": {
+    "week_start": "2026-10-26",
+    "month_start": "2026-10-05",
+    "end": "2026-11-01"
+  },
+  "channel": {
+    "id": "UCsVwhTvFvaHzIC3aZ850fzw",
+    "title": "BTYS",
+    "subscribers": 18,
+    "hidden_subscribers": false,
+    "total_views": 6042,
+    "video_count": 15
+  },
+  "last_7_days": {
+    "views": 3952,
+    "watch_minutes": 1385,
+    "subs_gained": 13,
+    "subs_lost": 0,
+    "likes": 104,
+    "comments": 3,
+    "shares": 6,
+    "avg_view_seconds": 38,
+    "avg_view_percent": 78.0
+  },
+  "last_28_days": {
+    "views": 3952,
+    "watch_minutes": 1385,
+    "subs_gained": 13,
+    "subs_lost": 0
+  },
+  "top_videos": [
+    {
+      "id": "fVbMIytPZZI",
+      "title": "The Fish with Transparent Blood",
+      "views": 1134,
+      "watch_minutes": 532,
+      "avg_view_percent": 89.9,
+      "likes": 38,
+      "url": "https://www.youtube.com/watch?v=fVbMIytPZZI"
+    },
+    {
+      "id": "ZfChuAxWyYs",
+      "title": "The Moon Racing Mars: Phobos' Fatal Countdown",
+      "views": 551,
+      "watch_minutes": 117,
+      "avg_view_percent": 50.9,
+      "likes": 11,
+      "url": "https://www.youtube.com/watch?v=ZfChuAxWyYs"
+    },
+    {
+      "id": "8qS7TvV2NAM",
+      "title": "Mercury's Furnace\u2011Cold Paradox: Scorching Day, Icy Night",
+      "views": 495,
+      "watch_minutes": 201,
+      "avg_view_percent": 90.0,
+      "likes": 16,
+      "url": "https://www.youtube.com/watch?v=8qS7TvV2NAM"
+    },
+    {
+      "id": "AYwCA2uac_U",
+      "title": "Venomous Mammal: The Solenodon\u2019s Secret Weapon",
+      "views": 414,
+      "watch_minutes": 281,
+      "avg_view_percent": 118.8,
+      "likes": 23,
+      "url": "https://www.youtube.com/watch?v=AYwCA2uac_U"
+    },
+    {
+      "id": "agKCoiMDpbY",
+      "title": "The SHOCKING Truth About Venus\u2019s Day Longer Than Its Year",
+      "views": 340,
+      "watch_minutes": 77,
+      "avg_view_percent": 52.7,
+      "likes": 6,
+      "url": "https://www.youtube.com/watch?v=agKCoiMDpbY"
+    },
+    {
+      "id": "FAQOkLiVURU",
+      "title": "The Star\u2011Nosed Mole: Nature\u2019s Lightning\u2011Fast Dinner Detector",
+      "views": 302,
+      "watch_minutes": 68,
+      "avg_view_percent": 56.8,
+      "likes": 3,
+      "url": "https://www.youtube.com/watch?v=FAQOkLiVURU"
+    },
+    {
+      "id": "4ckS-rdHJ8k",
+      "title": "The Hidden Balance Sensor Inside Your Ear",
+      "views": 201,
+      "watch_minutes": 24,
+      "avg_view_percent": 35.9,
+      "likes": 1,
+      "url": "https://www.youtube.com/watch?v=4ckS-rdHJ8k"
+    }
+  ],
+  "analytics_error": null,
+  "recent_uploads": [
+    {
+      "id": "6R0CVKtgXuY",
+      "title": "The Frog That Can Survive a Year Without Water",
+      "published_at": "2026-11-02T14:01:05Z",
+      "duration_seconds": 44,
+      "views": 1,
+      "likes": 0,
+      "comments": 0,
+      "url": "https://www.youtube.com/watch?v=6R0CVKtgXuY"
+    },
+    {
+      "id": "a-rnv9nOj1A",
+      "title": "The Hidden Eye Jitter That Stops Your Vision From Fading",
+      "published_at": "2026-11-01T20:27:04Z",
+      "duration_seconds": 44,
+      "views": 8,
+      "likes": 1,
+      "comments": 0,
+      "url": "https://www.youtube.com/watch?v=a-rnv9nOj1A"
+    },
+    {
+      "id": "ARe4im3ZSW0",
+      "title": "The Tuatara\u2019s Secret Third Eye That Beats Modern Vision",
+      "published_at": "2026-11-01T17:33:30Z",
+      "duration_seconds": 45,
+      "views": 10,
+      "likes": 0,
+      "comments": 0,
+      "url": "https://www.youtube.com/watch?v=ARe4im3ZSW0"
+    },
+    {
+      "id": "CNlaOD55kso",
+      "title": "The Moon That Sprays Water Columns Higher Than Skyscrapers",
+      "published_at": "2026-11-01T12:12:18Z",
+      "duration_seconds": 51,
+      "views": 9,
+      "likes": 0,
+      "comments": 0,
+      "url": "https://www.youtube.com/watch?v=CNlaOD55kso"
+    },
+    {
+      "id": "QumBq7bDlrI",
+      "title": "The Barreleye: Deep Sea Fish with a Living Crystal Helmet",
+      "published_at": "2026-10-31T19:54:04Z",
+      "duration_seconds": 43,
+      "views": 953,
+      "likes": 8,
+      "comments": 0,
+      "url": "https://www.youtube.com/watch?v=QumBq7bDlrI"
+    },
+    {
+      "id": "BWdiy_R5XDY",
+      "title": "The Surprising Space Height Boost Astronauts Experience",
+      "published_at": "2026-10-31T16:44:06Z",
+      "duration_seconds": 47,
+      "views": 312,
+      "likes": 15,
+      "comments": 0,
+      "url": "https://www.youtube.com/watch?v=BWdiy_R5XDY"
+    },
+    {
+      "id": "Fjj5bpsIG_g",
+      "title": "Your Stomach's Secret: A Two\u2011Week Self\u2011Repair Cycle",
+      "published_at": "2026-10-31T11:21:35Z",
+      "duration_seconds": 46,
+      "views": 995,
+      "likes": 9,
+      "comments": 0,
+      "url": "https://www.youtube.com/watch?v=Fjj5bpsIG_g"
+    },
+    {
+      "id": "8qS7TvV2NAM",
+      "title": "Mercury's Furnace\u2011Cold Paradox: Scorching Day, Icy Night",
+      "published_at": "2026-10-30T20:41:33Z",
+      "duration_seconds": 47,
+      "views": 627,
+      "likes": 19,
+      "comments": 0,
+      "url": "https://www.youtube.com/watch?v=8qS7TvV2NAM"
+    },
+    {
+      "id": "nyvtNvy3y40",
+      "title": "The Hidden Brain Inside Your Gut That Controls Mood",
+      "published_at": "2026-10-30T17:40:07Z",
+      "duration_seconds": 49,
+      "views": 145,
+      "likes": 7,
+      "comments": 0,
+      "url": "https://www.youtube.com/watch?v=nyvtNvy3y40"
+    },
+    {
+      "id": "FAQOkLiVURU",
+      "title": "The Star\u2011Nosed Mole: Nature\u2019s Lightning\u2011Fast Dinner Detector",
+      "published_at": "2026-10-30T06:28:53Z",
+      "duration_seconds": 46,
+      "views": 332,
+      "likes": 6,
+      "comments": 0,
+      "url": "https://www.youtube.com/watch?v=FAQOkLiVURU"
+    },
+    {
+      "id": "4ckS-rdHJ8k",
+      "title": "The Hidden Balance Sensor Inside Your Ear",
+      "published_at": "2026-10-29T16:52:21Z",
+      "duration_seconds": 45,
+      "views": 224,
+      "likes": 4,
+      "comments": 0,
+      "url": "https://www.youtube.com/watch?v=4ckS-rdHJ8k"
+    },
+    {
+      "id": "ZfChuAxWyYs",
+      "title": "The Moon Racing Mars: Phobos' Fatal Countdown",
+      "published_at": "2026-10-29T06:29:23Z",
+      "duration_seconds": 43,
+      "views": 558,
+      "likes": 13,
+      "comments": 0,
+      "url": "https://www.youtube.com/watch?v=ZfChuAxWyYs"
+    }
+  ]
+}
